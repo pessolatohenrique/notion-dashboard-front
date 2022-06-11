@@ -5,6 +5,7 @@ import ExampleList from "./views/register/ExampleList";
 import ExampleForm from "./views/register/ExampleForm";
 import ExampleDetail from "./views/register/ExampleDetail";
 import NotFound from "./components/NotFound";
+import DashboardContainer from "./views/dashboard/DashboardContainer";
 
 function App() {
   return (
@@ -12,6 +13,10 @@ function App() {
       <AppBarWrapper />
 
       <Switch>
+        <Route exact path="/">
+          <DashboardContainer />
+        </Route>
+
         <Route exact path="/autores">
           <ExampleList />
         </Route>
