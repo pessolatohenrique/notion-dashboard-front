@@ -6,6 +6,7 @@ import {
   IDatabaseResponseList,
   IDatabaseSearchForm,
 } from "../../interfaces/Database";
+import { IDatabaseSummarized } from "../../interfaces/Statistic";
 
 function DashboardContainer() {
   const {
@@ -17,7 +18,13 @@ function DashboardContainer() {
     reset,
   } = useForm<IDatabaseSearchForm>();
 
+  const watchId = watch("id");
+
   const [databases, setDatabases] = useState<IDatabaseResponseList>({
+    items: [],
+  });
+
+  const [statistic, setStatistic] = useState<IDatabaseSummarized>({
     items: [],
   });
 
@@ -31,14 +38,29 @@ function DashboardContainer() {
 
     async function loadMain() {
       const databases = await loadDatabases();
-      reset({ id: "0c72c795-7b93-4de7-8e34-758490319795" });
       setDatabases({ items: databases });
     }
 
     loadMain();
   }, []);
 
-  console.log("databases", databases.items);
+  useEffect(() => {
+    async function loadStatistic() {
+      try {
+        const response = await axios.get(`statistic/${watchId}?fromCache=true`);
+        return response?.data?.result;
+      } catch (error) {}
+    }
+
+    async function loadMain() {
+      if (watchId) {
+        const statistic = await loadStatistic();
+        setStatistic({ items: statistic });
+      }
+    }
+
+    loadMain();
+  }, [watchId]);
 
   return (
     <Box
