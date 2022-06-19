@@ -18,21 +18,13 @@ import {
 import {
   IDatabaseSummarized,
   IDatabaseItemSummaridedResult,
-  IDatabaseItemSummarized,
 } from "../../interfaces/Statistic";
 import { THEME_COLOR } from "../../constants/default_settings";
 import { BarChartComparative } from "../../components/ChartWrapper";
 import { IBarChartItem } from "../../interfaces/Chart";
 
 function DashboardContainer() {
-  const {
-    control,
-    register,
-    handleSubmit,
-    formState: { errors },
-    watch,
-    reset,
-  } = useForm<IDatabaseSearchForm>();
+  const { register, watch } = useForm<IDatabaseSearchForm>();
 
   const watchId = watch("id");
 
@@ -64,7 +56,7 @@ function DashboardContainer() {
   useEffect(() => {
     function mapValuesChart(values: Array<IDatabaseItemSummaridedResult>) {
       const valuesChart: Array<IBarChartItem> = [];
-      [...values].map((subitem) => {
+      [...values].forEach((subitem) => {
         valuesChart.push({
           key: Object.keys(subitem)[0],
           value: Object.values(subitem)[0],
@@ -149,7 +141,7 @@ function DashboardContainer() {
       >
         {statistic.items?.map((item) => {
           return (
-            <Grid item lg={6} md={6} sm={6} xs={6}>
+            <Grid item lg={6} md={12} sm={12} xs={12}>
               <Card>
                 <CardContent>
                   <Typography

@@ -1,9 +1,6 @@
 import React from "react";
 import AppBarWrapper from "./components/AppBarWrapper";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import ExampleList from "./views/register/ExampleList";
-import ExampleForm from "./views/register/ExampleForm";
-import ExampleDetail from "./views/register/ExampleDetail";
 import NotFound from "./components/NotFound";
 import DashboardContainer from "./views/dashboard/DashboardContainer";
 
@@ -15,18 +12,6 @@ function App() {
       <Switch>
         <Route exact path="/">
           <DashboardContainer />
-        </Route>
-
-        <Route exact path="/autores">
-          <ExampleList />
-        </Route>
-
-        <Route exact path="/livros">
-          <ExampleForm />
-        </Route>
-
-        <Route exact path="/livros/:id">
-          <ExampleDetail />
         </Route>
 
         <Route path="*">
