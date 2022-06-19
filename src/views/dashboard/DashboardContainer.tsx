@@ -1,12 +1,28 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Grid, InputLabel, Select, Box, MenuItem } from "@mui/material";
+import {
+  Grid,
+  InputLabel,
+  Select,
+  Box,
+  MenuItem,
+  Card,
+  CardContent,
+  Typography,
+} from "@mui/material";
 import { useForm } from "react-hook-form";
 import {
   IDatabaseResponseList,
   IDatabaseSearchForm,
 } from "../../interfaces/Database";
-import { IDatabaseSummarized } from "../../interfaces/Statistic";
+import {
+  IDatabaseSummarized,
+  IDatabaseItemSummaridedResult,
+  IDatabaseItemSummarized,
+} from "../../interfaces/Statistic";
+import { THEME_COLOR } from "../../constants/default_settings";
+import { BarChartComparative } from "../../components/ChartWrapper";
+import { IBarChartItem } from "../../interfaces/Chart";
 
 function DashboardContainer() {
   const {
@@ -32,7 +48,8 @@ function DashboardContainer() {
     async function loadDatabases() {
       try {
         const response = await axios.get(`/search?fromCache=true`);
-        return response?.data?.results;
+        const results = response?.data?.results;
+        return results;
       } catch (error) {}
     }
 
@@ -45,10 +62,29 @@ function DashboardContainer() {
   }, []);
 
   useEffect(() => {
+    function mapValuesChart(values: Array<IDatabaseItemSummaridedResult>) {
+      const valuesChart: Array<IBarChartItem> = [];
+      [...values].map((subitem) => {
+        valuesChart.push({
+          key: Object.keys(subitem)[0],
+          value: Object.values(subitem)[0],
+        });
+      });
+
+      return valuesChart;
+    }
+
     async function loadStatistic() {
       try {
         const response = await axios.get(`statistic/${watchId}?fromCache=true`);
-        return response?.data?.result;
+        const results = response?.data?.result;
+
+        const resultsMapped = [...results].map((item) => {
+          const valuesChart: Array<IBarChartItem> = mapValuesChart(item.values);
+          return { ...item, valuesChart: valuesChart };
+        });
+
+        return resultsMapped;
       } catch (error) {}
     }
 
@@ -99,6 +135,46 @@ function DashboardContainer() {
             })}
           </Select>
         </Grid>
+      </Grid>
+
+      <Grid
+        container
+        rowSpacing={{ xs: 3 }}
+        marginLeft={2}
+        marginRight={2}
+        columnSpacing={3}
+        marginTop={3}
+        marginBottom={2}
+        sx={{ width: "96%" }}
+      >
+        {statistic.items?.map((item) => {
+          return (
+            <Grid item lg={6} md={6} sm={6} xs={6}>
+              <Card>
+                <CardContent>
+                  <Typography
+                    gutterBottom
+                    variant="h5"
+                    component="h1"
+                    color={THEME_COLOR}
+                  >
+                    Agrupado por {item.key}
+                  </Typography>
+
+                  <BarChartComparative
+                    data={item.valuesChart || []}
+                    labelProperty="key"
+                    mainConfig={{
+                      legend: "Contagem",
+                      backgroundColor: "rgba(53, 162, 235, 0.5)",
+                      valueProperty: "value",
+                    }}
+                  />
+                </CardContent>
+              </Card>
+            </Grid>
+          );
+        })}
       </Grid>
     </Box>
   );
