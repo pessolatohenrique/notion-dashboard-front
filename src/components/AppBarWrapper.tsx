@@ -13,8 +13,7 @@ import {
 } from "@mui/material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import MenuIcon from "@mui/icons-material/Menu";
-import BookIcon from "@mui/icons-material/Book";
-import PeopleIcon from "@mui/icons-material/People";
+import DashboardIcon from "@mui/icons-material/Dashboard";
 import { MenuList, MenuItem } from "../interfaces/Menu";
 import { PROJECT_NAME } from "../constants/default_settings";
 import { initializeAxios } from "../utils/requests";
@@ -22,19 +21,9 @@ import { initializeAxios } from "../utils/requests";
 const menuList: MenuList = {
   items: [
     {
-      table: "autores",
-      link: "autores",
-      icon: <PeopleIcon />,
-    },
-    {
-      table: "livros",
-      link: "livros",
-      icon: <BookIcon />,
-    },
-    {
-      table: "livros detalhes",
-      link: "livros/5",
-      icon: <BookIcon />,
+      table: "dashboard",
+      link: "",
+      icon: <DashboardIcon />,
     },
   ],
 };
@@ -77,7 +66,6 @@ function AppBarWrapper() {
           >
             {PROJECT_NAME}
           </Typography>
-          <Button color="inherit">Login</Button>
         </Toolbar>
       </AppBar>
       <Drawer variant="persistent" anchor="left" open={open}>
